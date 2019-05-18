@@ -60,6 +60,13 @@ When prompted to reboot, press enter, allow reboot, and re-login as `pi`:
 
 	./raspberry-pi-setup/bootstrap-raspberry-pi.sh
 
+If prompted for admin password, provide your chosen new password
+for the `INSTALL_ADMIN_USER` user in `config.sh`:
+
+	[[ Creating Admin User ]]
+	New Admin Password: 
+
+
 Continue to do so until you see:
 
 	------------------
