@@ -109,7 +109,7 @@ if sudo test -f "${INSTALL_DATA_DIR}/ADMIN_USER_CREATED"; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Creating Admin User ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Creating Admin User ]]${COLOR_DEFAULT}"
-	read -s "New Admin Password: " INSTALL_ADMIN_PASS
+	read -s -p "New Admin Password: " INSTALL_ADMIN_PASS
 	sudo adduser --disabled-password --gecos "" "$INSTALL_ADMIN_USER"
 	echo "$INSTALL_ADMIN_PASS" | sudo passwd "$INSTALL_ADMIN_USER" --stdin
 	sudo -c "touch \"${INSTALL_DATA_DIR}/ADMIN_USER_CREATED\""
