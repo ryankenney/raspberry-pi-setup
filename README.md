@@ -44,8 +44,9 @@ Clone this repo:
 
 Tweak the config to your needs:
 
-	cp /opt/raspberry-pi-setup/config.sh.example /opt/raspberry-pi-setupconfig.sh
-	vi /opt/raspberry-pi-setupconfig.sh
+	cd /opt/raspberry-pi-setup/
+	cp config.sh.example config.sh
+	vi config.sh
 
 Run the script:
 
