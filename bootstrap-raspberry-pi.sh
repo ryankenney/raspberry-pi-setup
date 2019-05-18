@@ -147,7 +147,7 @@ if [[ "$INSTALL_WIFI_SSID" != "" && "$INSTALL_WIFI_SSID" != "" ]]; then
 		echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Configuring Wifi ]]${COLOR_DEFAULT}"
 	else
 		echo -e "${COLOR_BLUE_LIGHT}[[ Configuring Wifi ]]${COLOR_DEFAULT}"
-		sudo cat >> /etc/wpa_supplicant/wpa_supplicant.conf << EOL
+		sudo bash -c "cat >> /etc/wpa_supplicant/wpa_supplicant.conf" << EOL
 
 network={
 ssid="$INSTALL_WIFI_SSID"
