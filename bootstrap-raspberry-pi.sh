@@ -238,7 +238,7 @@ else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'APT::Periodic::Update-Package-Lists' option ]]${COLOR_DEFAULT}"
 	sudo bash -c "echo 'APT::Periodic::Update-Package-Lists \"1\";' >> /etc/apt/apt.conf.d/20auto-upgrades"
 fi
-if [[ "$(grep_exists '^APT::Periodic::Unattended-Upgrade\s\+"1";$' /etc/apt/apt.conf.d/20auto-upgrades") == "true" ]]; then
+if [[ "$(grep_exists '^APT::Periodic::Unattended-Upgrade\s\+"1";$' /etc/apt/apt.conf.d/20auto-upgrades)" == "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'APT::Periodic::Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'APT::Periodic::Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
