@@ -125,7 +125,8 @@ else
 	sudo install -o "${INSTALL_ADMIN_USER}" -g "${INSTALL_ADMIN_USER}" -m "0700" -d "/home/${INSTALL_ADMIN_USER}/.ssh"
 	echo -e "${COLOR_BLUE_LIGHT}[[ Generating SSH Key ]]${COLOR_DEFAULT}"
 	sudo ssh-keygen -b 2048 -t rsa -f "/home/${INSTALL_ADMIN_USER}/.ssh/id_rsa" -q -N ""
-	sudo install -o "${INSTALL_ADMIN_USER}" -g "${INSTALL_ADMIN_USER}" -m "0600" "/home/${INSTALL_ADMIN_USER}/.ssh"/id_rsa*
+	sudo chmod "0600" "/home/${INSTALL_ADMIN_USER}/.ssh"/id_rsa*
+	sudo chown "${INSTALL_ADMIN_USER}:${INSTALL_ADMIN_USER}" "/home/${INSTALL_ADMIN_USER}/.ssh"/id_rsa*
 fi
 
 # Add admin to sudoers
