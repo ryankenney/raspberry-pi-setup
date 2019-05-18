@@ -29,9 +29,7 @@ fi
 
 # Fully restarts the network
 function restart_network() {
-	echo ""
-	echo "==== Restarting the Network ===="
-	echo ""
+	echo -e "${COLOR_BLUE_LIGHT}[[ Restarting the Network ]]${COLOR_DEFAULT}"
 	sudo systemctl daemon-reload
 	sudo systemctl stop dhcpcd
 	for NET_DEV in /sys/class/net/*; do
