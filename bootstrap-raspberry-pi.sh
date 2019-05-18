@@ -185,6 +185,7 @@ if [[ "$(grep_exists "^${INSTALL_HOSTNAME}\\.${INSTALL_HOSTNAME}\$" /etc/hostnam
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Updating Hostname ]]${COLOR_DEFAULT}"
 	sudo sed -i "s|^127\\.0\\.1\\.1\s\+.\+|127.0.1.1\t${INSTALL_IP_ADDR} ${INSTALL_HOSTNAME} ${INSTALL_HOSTNAME}.${INSTALL_DOMAIN}|g" /etc/hosts
+	sudo bash -c "echo \"${INSTALL_HOSTNAME}.${INSTALL_DOMAIN}\" > /etc/hostname"
 	sudo hostname "${INSTALL_HOSTNAME}.${INSTALL_DOMAIN}"
 fi
 
