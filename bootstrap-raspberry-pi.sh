@@ -121,6 +121,8 @@ fi
 if sudo test -f "/home/${INSTALL_ADMIN_USER}/.ssh/id_rsa"; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Generating SSH Key ]]${COLOR_DEFAULT}"
 else
+	echo -e "${COLOR_BLUE_LIGHT}[[ Creating SSH Directory ]]${COLOR_DEFAULT}"
+	sudo install -o "${INSTALL_ADMIN_USER}" -g "${INSTALL_ADMIN_USER}" -m "0700" -d "/home/${INSTALL_ADMIN_USER}/.ssh"
 	echo -e "${COLOR_BLUE_LIGHT}[[ Generating SSH Key ]]${COLOR_DEFAULT}"
 	sudo ssh-keygen -b 2048 -t rsa -f "/home/${INSTALL_ADMIN_USER}/.ssh/id_rsa" -q -N ""
 	sudo install -o "${INSTALL_ADMIN_USER}" -g "${INSTALL_ADMIN_USER}" -m "0600" "/home/${INSTALL_ADMIN_USER}/.ssh"/id_rsa*
