@@ -1,3 +1,8 @@
+# Admin User to Create
+INSTALL_ADMIN_USER="myadmin"
+# (uncomment to set here, otherwise you'll be prompted)
+#INSTALL_ADMIN_PASS="P@ssw0rd!"
+
 # Computer hostname
 INSTALL_HOSTNAME="mycomputer"
 # Computer domain
