@@ -3,6 +3,10 @@
 # Stop on any failure
 set -e
 
+SCRIPT_FILENAME=`basename "$0"`
+SCRIPT_DIR=$(dirname `readlink -f "$0"`)
+source "${SCRIPT_DIR}/config.sh"
+
 # Setup colors
 # check if stdout is a terminal...
 if test -t 1; then
@@ -80,11 +84,6 @@ function grep_exists() {
 		echo "false"
 	fi
 }
-
-SCRIPT_FILENAME=`basename "$0"`
-SCRIPT_DIR=$(dirname `readlink -f "$0"`)
-
-source "${SCRIPT_DIR}/config.sh"
 
 # Initialize data dir
 INSTALL_DATA_DIR="/opt/raspberry-pi-boostrap"
@@ -224,21 +223,35 @@ echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring Unattended Upgrades Installed ]]${COLOR_
 sudo apt -y install unattended-upgrades update-notifier-common
 
 # Setup unattended upgrade options
-if [[ '^APT::Periodic::Update-Package-Lists\s+"1";$' /etc/apt/apt.conf.d/20auto-upgrades == "true" ]]; then
-	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'Update-Package-Lists' option ]]${COLOR_DEFAULT}"
+if [[ "$(grep_exists '^APT::Periodic::Update-Package-Lists\s+"1";$' /etc/apt/apt.conf.d/20auto-upgrades)" == "true" ]]; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'APT::Periodic::Update-Package-Lists' option ]]${COLOR_DEFAULT}"
 else
-	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'Update-Package-Lists' option ]]${COLOR_DEFAULT}"
+	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'APT::Periodic::Update-Package-Lists' option ]]${COLOR_DEFAULT}"
 	sudo bash -c "echo 'APT::Periodic::Update-Package-Lists \"1\";' >> /etc/apt/apt.conf.d/20auto-upgrades"
 fi
-if [[ '^APT::Periodic::Unattended-Upgrade\s+"1";$' /etc/apt/apt.conf.d/20auto-upgrades == "true" ]]; then
-	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
+if [[ "$(grep_exists '^APT::Periodic::Unattended-Upgrade\s+"1";$' /etc/apt/apt.conf.d/20auto-upgrades") == "true" ]]; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'APT::Periodic::Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
 else
-	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
+	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'APT::Periodic::Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
 	sudo bash -c "echo 'APT::Periodic::Unattended-Upgrade \"1\";' >> /etc/apt/apt.conf.d/20auto-upgrades"
 fi
+if [[ "$(grep_exists '^\s+"origin=Raspbian,codename=${distro_codename},label=Raspbian";$' /etc/apt/apt.conf.d/50unattended-upgrades)" == "true" ]]; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Updating 'Unattended-Upgrade::Origins-Pattern' option ]]${COLOR_DEFAULT}"
+else
+	echo -e "${COLOR_BLUE_LIGHT}[[ Updating 'Unattended-Upgrade::Origins-Pattern' option ]]${COLOR_DEFAULT}"
+	sudo sed -i 's|^\(\s\+"origin=Debian,codename=${distro_codename},label=Debian-Security";\s*\)$|//\1\n\t"origin=Raspbian,codename=${distro_codename},label=Raspbian";\n\t"origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation";|g' /etc/apt/apt.conf.d/50unattended-upgrades
+fi
+if [[ "$(grep_exists '^Unattended-Upgrade::Automatic-Reboot "true";$' /etc/apt/apt.conf.d/50unattended-upgrades)" == "true" ]]; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'Unattended-Upgrade::Automatic-Reboot' option ]]${COLOR_DEFAULT}"
+else
+	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'Unattended-Upgrade::Automatic-Reboot' option ]]${COLOR_DEFAULT}"
+	sudo bash -c "echo 'Unattended-Upgrade::Automatic-Reboot \"true\";' >> /etc/apt/apt.conf.d/50unattended-upgrades"
+fi
 
-
-... finish unattended upgrades ...
+# APT update
+echo -e "${COLOR_BLUE_LIGHT}[[ Applying APT Updates ]]${COLOR_DEFAULT}"
+sudo apt update
+sudo apt dist-upgrade
 
 echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
 echo -e "${COLOR_BLUE_LIGHT}INSTALL COMPLETE !${COLOR_DEFAULT}"
