@@ -138,6 +138,7 @@ else
 	# NOTE: This will fail in production if it has a "." or "~" in the filename
 	sudo visudo -cf "${INSTALL_DATA_DIR}/99_admin_user"
 	sudo install -o root -g root -m "0440" "${INSTALL_DATA_DIR}/99_admin_user" /etc/sudoers.d/
+	sudo rm -f "${INSTALL_DATA_DIR}/99_admin_user"
 fi
 
 # Configure wifi
