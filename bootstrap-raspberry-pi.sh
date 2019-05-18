@@ -96,6 +96,9 @@ else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Setting Keyboard Layout to US ]]${COLOR_DEFAULT}"
 	sudo sed -i 's|^XKBLAYOUT=.*$|XKBLAYOUT="us"|g' /etc/default/keyboard
 
+	echo -e "${COLOR_BLUE_LIGHT}--------------------------------${COLOR_DEFAULT}"
+	echo -e "${COLOR_BLUE_LIGHT}Resume this script after reboot.${COLOR_DEFAULT}"
+	echo -e "${COLOR_BLUE_LIGHT}--------------------------------${COLOR_DEFAULT}"
 	echo -e "${COLOR_BLUE_LIGHT}[[ Rebooting ]]${COLOR_DEFAULT}"
 	read -p "Press enter to continue"
 	sudo reboot
@@ -252,6 +255,23 @@ fi
 echo -e "${COLOR_BLUE_LIGHT}[[ Applying APT Updates ]]${COLOR_DEFAULT}"
 sudo apt update
 sudo apt dist-upgrade
+
+if [[ "$(grep_exists '^pi:" /etc/passwd")" == "false" ]]; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting pi User ]]${COLOR_DEFAULT}"
+else
+	if [[ "$USER" = "pi" ]]; then
+		echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
+		echo -e "${COLOR_BLUE_LIGHT}Login as your new admin user after${COLOR_DEFAULT}"
+		echo -e "${COLOR_BLUE_LIGHT}reboot and resume this script.${COLOR_DEFAULT}"
+		echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
+		echo -e "${COLOR_BLUE_LIGHT}[[ Rebooting ]]${COLOR_DEFAULT}"
+		read -p "Press enter to continue"
+		sudo reboot
+	fi
+
+	echo -e "${COLOR_BLUE_LIGHT}[[ Deleting pi User ]]${COLOR_DEFAULT}"
+	sudo deluser pi
+fi
 
 echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
 echo -e "${COLOR_BLUE_LIGHT}INSTALL COMPLETE !${COLOR_DEFAULT}"
