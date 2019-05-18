@@ -259,8 +259,8 @@ fi
 
 # APT update
 echo -e "${COLOR_BLUE_LIGHT}[[ Applying APT Updates ]]${COLOR_DEFAULT}"
-sudo apt update
-sudo apt dist-upgrade
+sudo apt -y update
+sudo apt -y dist-upgrade
 
 if [[ "$(grep_exists '^pi:' /etc/passwd)" != "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting pi User ]]${COLOR_DEFAULT}"
