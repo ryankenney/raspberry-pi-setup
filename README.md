@@ -37,18 +37,21 @@ Install git:
 
 Clone this repo:
 
-	git clone https://github.com/ryankenney/raspberry-pi-setup.git
+	# Create directory owned by pi
+	sudo install -o pi -g pi -d /opt/raspberry-pi-setup
+	# Clone repo to directory
+	git clone https://github.com/ryankenney/raspberry-pi-setup.git /opt/raspberry-pi-setup
 
 Tweak the config to your needs:
 
-	cp ./raspberry-pi-setup/config.sh.example ./raspberry-pi-setup/config.sh
-	vi ./raspberry-pi-setup/config.sh
+	cp /opt/raspberry-pi-setup/config.sh.example /opt/raspberry-pi-setupconfig.sh
+	vi /opt/raspberry-pi-setupconfig.sh
 
 Run the script:
 
-	./raspberry-pi-setup/bootstrap-raspberry-pi.sh
+	/opt/raspberry-pi-setup/bootstrap-raspberry-pi.sh
 
-When prompted to reboot, press enter, allow reboot, and re-login as `pi`:
+When prompted to reboot, press enter, allow reboot:
 
 	--------------------------------
 	Resume this script after reboot.
@@ -56,9 +59,9 @@ When prompted to reboot, press enter, allow reboot, and re-login as `pi`:
 	[[ Rebooting ]]
 	Press enter to continue
 
-... and resume script:
+... and re-login as `pi` and resume the script:
 
-	./raspberry-pi-setup/bootstrap-raspberry-pi.sh
+	/opt/raspberry-pi-setup/bootstrap-raspberry-pi.sh
 
 If prompted for admin password, provide your chosen new password
 for the `INSTALL_ADMIN_USER` user in `config.sh`:
@@ -66,6 +69,18 @@ for the `INSTALL_ADMIN_USER` user in `config.sh`:
 	[[ Creating Admin User ]]
 	New Admin Password: 
 
+When prompted to switch to your new admi user, press enter, allow reboot:
+
+	------------------
+	Login as your new admin user after${COLOR_DEFAULT}"
+	reboot and resume this script.${COLOR_DEFAULT}"
+	------------------
+	[[ Rebooting ]]
+	Press enter to continue
+
+... and re-login as your `INSTALL_ADMIN_USER` and resume the script:
+
+	/opt/raspberry-pi-setup/bootstrap-raspberry-pi.sh
 
 Continue to do so until you see:
 
@@ -74,4 +89,3 @@ Continue to do so until you see:
 	------------------
 	[[ Rebooting ]]
 	Press enter to continue
-
