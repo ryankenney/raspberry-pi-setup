@@ -161,7 +161,8 @@ fi
 
 # Enable firewall
 echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring Firewall Enabled ]]${COLOR_DEFAULT}"
-sudo apt-get install -y ufw
+# We skip ugrade on repeated re-runs
+sudo apt-get install -y --no-upgrade ufw
 sudo ufw enable
 
 if [[ "$(grep_exists '^static ip_address=.*$' /etc/dhcpcd.conf)" == "true" ]]; then
