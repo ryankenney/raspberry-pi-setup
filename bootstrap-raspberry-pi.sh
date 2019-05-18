@@ -142,7 +142,7 @@ fi
 
 # Configure wifi
 if [[ "$INSTALL_WIFI_SSID" != "" && "$INSTALL_WIFI_SSID" != "" ]]; then
-	if [[ "$(grep_exists '^ssid="$INSTALL_WIFI_SSID"$' /etc/wpa_supplicant/wpa_supplicant.conf)" == "true" ]]; then
+	if [[ "$(grep_exists "^ssid=\"$INSTALL_WIFI_SSID\"\$" /etc/wpa_supplicant/wpa_supplicant.conf)" == "true" ]]; then
 		echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Configuring Wifi ]]${COLOR_DEFAULT}"
 	else
 		echo -e "${COLOR_BLUE_LIGHT}[[ Configuring Wifi ]]${COLOR_DEFAULT}"
