@@ -92,13 +92,8 @@ if [[ "$(grep_exists '^XKBLAYOUT="us"$' /etc/default/keyboard)" == "true" ]]; th
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Setting Keyboard Layout to US ]]${COLOR_DEFAULT}"
 	sudo sed -i 's|^XKBLAYOUT=.*$|XKBLAYOUT="us"|g' /etc/default/keyboard
-
-	echo -e "${COLOR_BLUE_LIGHT}--------------------------------${COLOR_DEFAULT}"
-	echo -e "${COLOR_BLUE_LIGHT}Resume this script after reboot.${COLOR_DEFAULT}"
-	echo -e "${COLOR_BLUE_LIGHT}--------------------------------${COLOR_DEFAULT}"
-	echo -e "${COLOR_BLUE_LIGHT}[[ Rebooting ]]${COLOR_DEFAULT}"
-	read -p "Press enter to continue"
-	sudo reboot
+	# Reload keyboard configuration in the active session
+	sudo setupcon -k
 fi
 
 # Create admin user
