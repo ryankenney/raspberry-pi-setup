@@ -74,7 +74,7 @@ function grep_exists() {
 	shift
 
 	set +e
-	grep "$grepPattern" "$grepFile"
+	grep "$grepPattern" "$grepFile" > /dev/null
 	local exitCode="$?"
 	set -e
 
@@ -105,13 +105,11 @@ else
 fi
 
 # Create admin user
-if [[ ! sudo test -f "${INSTALL_DATA_DIR}/ADMIN_USER_CREATED" ]]; then
+if sudo test -f "${INSTALL_DATA_DIR}/ADMIN_USER_CREATED"; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Creating Admin User ]]${COLOR_DEFAULT}"
 else
-	echo ""
-	read -p "Admin Password: " INSTALL_ADMIN_PASS
-
 	echo -e "${COLOR_BLUE_LIGHT}[[ Creating Admin User ]]${COLOR_DEFAULT}"
+	read -p "New Admin Password: " INSTALL_ADMIN_PASS
 	sudo adduser --disabled-password --gecos "" "$INSTALL_ADMIN_USER"
 	echo "$INSTALL_ADMIN_PASS" | sudo passwd "$INSTALL_ADMIN_USER" --stdin
 	sudo -c "touch \"${INSTALL_DATA_DIR}/ADMIN_USER_CREATED\""
