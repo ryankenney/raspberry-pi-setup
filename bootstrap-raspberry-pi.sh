@@ -162,7 +162,7 @@ fi
 # Enable firewall
 echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring Firewall Enabled ]]${COLOR_DEFAULT}"
 # We skip ugrade on repeated re-runs
-sudo apt-get install -y --no-upgrade ufw
+sudo apt install -y --no-upgrade ufw
 sudo ufw enable
 
 if [[ "$(grep_exists '^static ip_address=.*$' /etc/dhcpcd.conf)" == "true" ]]; then
@@ -228,7 +228,8 @@ fi
 
 # Install unattended upgrades
 echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring Unattended Upgrades Installed ]]${COLOR_DEFAULT}"
-sudo apt -y install unattended-upgrades update-notifier-common
+# We skip ugrade on repeated re-runs
+sudo apt install -y --no-upgrade ufw unattended-upgrades update-notifier-common
 
 # Setup unattended upgrade options
 if [[ "$(grep_exists '^APT::Periodic::Update-Package-Lists\s\+"1";$' /etc/apt/apt.conf.d/20auto-upgrades)" == "true" ]]; then
