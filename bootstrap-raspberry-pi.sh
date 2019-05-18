@@ -209,13 +209,23 @@ sudo systemctl enable ssh.service
 echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring SSH Port Open in Firewall ]]${COLOR_DEFAULT}"
 sudo ufw allow ssh
 
+# Enable locale
+if [[ "$(grep_exists '^en_US.UTF-8 UTF-8$' /etc/locale.gen)" == "true" ]]; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling US:English Locale ]]${COLOR_DEFAULT}"
+else
+	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling US:English Locale ]]${COLOR_DEFAULT}"
+	sudo bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
+fi
+
 # Set locale
 if [[ "$(grep_exists '^LANG="en_US.UTF-8"$' /etc/default/locale)" == "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Setting Locale to US:English ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Setting Locale to US:English ]]${COLOR_DEFAULT}"
 	sudo locale-gen --purge en_US.UTF-8
-	sudo bash -c "echo 'LANG=\"en_US.UTF-8\"' > /etc/default/locale"
+	sudo update-locale 'LANG=en_US.UTF-8'
+	# TODO: Needed?
+	# sudo dpkg-reconfigure --frontend noninteractive locales
 fi
 
 # Set timezone
