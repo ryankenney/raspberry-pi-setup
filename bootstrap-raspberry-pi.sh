@@ -3,7 +3,7 @@
 # Stop on any failure
 set -e
 
-SCRIPT_FILENAME=`basename "$0"`
+SCRIPT_FILENAME=$(basename "$0")
 SCRIPT_DIR=$(dirname `readlink -f "$0"`)
 source "${SCRIPT_DIR}/config.sh"
 
@@ -33,7 +33,7 @@ function restart_network() {
 	sudo systemctl daemon-reload
 	sudo systemctl stop dhcpcd
 	for NET_DEV in /sys/class/net/*; do
-		sudo ip addr flush dev "$NET_DEV"
+		sudo ip addr flush dev "$(basename "$NET_DEV")"
 	done
 	sudo systemctl start dhcpcd
 	sudo systemctl restart networking.service
