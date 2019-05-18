@@ -230,19 +230,19 @@ echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring Unattended Upgrades Installed ]]${COLOR_
 sudo apt -y install unattended-upgrades update-notifier-common
 
 # Setup unattended upgrade options
-if [[ "$(grep_exists '^APT::Periodic::Update-Package-Lists\s+"1";$' /etc/apt/apt.conf.d/20auto-upgrades)" == "true" ]]; then
+if [[ "$(grep_exists '^APT::Periodic::Update-Package-Lists\s\+"1";$' /etc/apt/apt.conf.d/20auto-upgrades)" == "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'APT::Periodic::Update-Package-Lists' option ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'APT::Periodic::Update-Package-Lists' option ]]${COLOR_DEFAULT}"
 	sudo bash -c "echo 'APT::Periodic::Update-Package-Lists \"1\";' >> /etc/apt/apt.conf.d/20auto-upgrades"
 fi
-if [[ "$(grep_exists '^APT::Periodic::Unattended-Upgrade\s+"1";$' /etc/apt/apt.conf.d/20auto-upgrades") == "true" ]]; then
+if [[ "$(grep_exists '^APT::Periodic::Unattended-Upgrade\s\+"1";$' /etc/apt/apt.conf.d/20auto-upgrades") == "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Enabling 'APT::Periodic::Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Enabling 'APT::Periodic::Unattended-Upgrade' option ]]${COLOR_DEFAULT}"
 	sudo bash -c "echo 'APT::Periodic::Unattended-Upgrade \"1\";' >> /etc/apt/apt.conf.d/20auto-upgrades"
 fi
-if [[ "$(grep_exists '^\s+"origin=Raspbian,codename=${distro_codename},label=Raspbian";$' /etc/apt/apt.conf.d/50unattended-upgrades)" == "true" ]]; then
+if [[ "$(grep_exists '^\s\+"origin=Raspbian,codename=${distro_codename},label=Raspbian";$' /etc/apt/apt.conf.d/50unattended-upgrades)" == "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Updating 'Unattended-Upgrade::Origins-Pattern' option ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Updating 'Unattended-Upgrade::Origins-Pattern' option ]]${COLOR_DEFAULT}"
