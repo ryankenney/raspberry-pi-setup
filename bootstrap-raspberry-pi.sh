@@ -83,8 +83,8 @@ function grep_exists() {
 }
 
 # Initialize data dir
-INSTALL_DATA_DIR="/opt/raspberry-pi-boostrap"
-sudo mkdir -p "$INSTALL_DATA_DIR"
+INSTALL_DATA_DIR="/opt/${SCRIPT_FILENAME}"
+sudo mkdir "$INSTALL_DATA_DIR"
 
 # Setup keyboard layout (and reboot)
 if [[ "$(grep_exists '^XKBLAYOUT="us"$' /etc/default/keyboard)" == "true" ]]; then
