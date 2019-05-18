@@ -111,6 +111,8 @@ else
 	fi
 	sudo adduser --disabled-password --gecos "" "$INSTALL_ADMIN_USER"
 	echo -e "$INSTALL_ADMIN_PASS\n$INSTALL_ADMIN_PASS" | sudo passwd "$INSTALL_ADMIN_USER"
+	# Clear password variable as soon as possible
+	INSTALL_ADMIN_PASS=""
 	sudo bash -c "touch \"${INSTALL_DATA_DIR}/ADMIN_USER_CREATED\""
 fi
 
@@ -257,7 +259,7 @@ echo -e "${COLOR_BLUE_LIGHT}[[ Applying APT Updates ]]${COLOR_DEFAULT}"
 sudo apt update
 sudo apt dist-upgrade
 
-if [[ "$(grep_exists '^pi:" /etc/passwd")" == "false" ]]; then
+if [[ "$(grep_exists '^pi:' /etc/passwd)" != "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting pi User ]]${COLOR_DEFAULT}"
 else
 	if [[ "$USER" = "pi" ]]; then
@@ -269,7 +271,6 @@ else
 		read -p "Press enter to continue"
 		sudo reboot
 	fi
-
 	echo -e "${COLOR_BLUE_LIGHT}[[ Deleting pi User ]]${COLOR_DEFAULT}"
 	sudo deluser pi
 fi
