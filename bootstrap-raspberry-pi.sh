@@ -74,7 +74,7 @@ function grep_exists() {
 	shift
 
 	set +e
-	grep "$grepPattern" "$grepFile" > /dev/null
+	sudo grep "$grepPattern" "$grepFile" > /dev/null
 	local exitCode="$?"
 	set -e
 
@@ -113,12 +113,12 @@ else
 		read -s -p "New Admin Password: " INSTALL_ADMIN_PASS
 	fi
 	sudo adduser --disabled-password --gecos "" "$INSTALL_ADMIN_USER"
-	echo "$INSTALL_ADMIN_PASS" | sudo passwd "$INSTALL_ADMIN_USER" --stdin
-	sudo -c "touch \"${INSTALL_DATA_DIR}/ADMIN_USER_CREATED\""
+	echo -e "$INSTALL_ADMIN_PASS\n$INSTALL_ADMIN_PASS" | sudo passwd "$INSTALL_ADMIN_USER"
+	sudo bash -c "touch \"${INSTALL_DATA_DIR}/ADMIN_USER_CREATED\""
 fi
 
 # Create SSH key
-if [[ sudo test -f "/home/${INSTALL_ADMIN_USER}/.ssh/id_rsa" ]]; then
+if sudo test -f "/home/${INSTALL_ADMIN_USER}/.ssh/id_rsa"; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Generating SSH Key ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Generating SSH Key ]]${COLOR_DEFAULT}"
@@ -127,7 +127,7 @@ else
 fi
 
 # Add admin to sudoers
-if [[ sudo test -f "/etc/sudoers.d/99_admin_user" ]]; then
+if sudo test -f "/etc/sudoers.d/99_admin_user"; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Granting Admin User Permissions ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Granting Admin User Permissions ]]${COLOR_DEFAULT}"
