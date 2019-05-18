@@ -180,7 +180,7 @@ EOL
 fi
 
 # Configure hostname
-if [[ "$(grep_exists "^${INSTALL_HOSTNAME}\\.${INSTALL_HOSTNAME}\$" /etc/hostname)" == "true" ]]; then
+if [[ "$(grep_exists "^${INSTALL_HOSTNAME}\\.${INSTALL_DOMAIN}\$" /etc/hostname)" == "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Updating Hostname ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Updating Hostname ]]${COLOR_DEFAULT}"
