@@ -274,14 +274,12 @@ else
 fi
 
 # Set locale
-if [[ "$(grep_exists '^LANG="en_US.UTF-8"$' /etc/default/locale)" == "true" ]]; then
+if [[ "$(locale | grep '^LANG='" == "LANG=en_US.UTF-8" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Setting Locale to US:English ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Setting Locale to US:English ]]${COLOR_DEFAULT}"
 	sudo locale-gen --purge en_US.UTF-8
 	sudo update-locale 'LANG=en_US.UTF-8'
-	# TODO: Needed?
-	# sudo dpkg-reconfigure --frontend noninteractive locales
 fi
 
 # Set timezone
