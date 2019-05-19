@@ -323,9 +323,14 @@ else
 fi
 
 # APT update
-echo -e "${COLOR_BLUE_LIGHT}[[ Applying APT Updates ]]${COLOR_DEFAULT}"
-sudo apt -y update
-sudo apt -y dist-upgrade
+if sudo test -f "${INSTALL_DATA_DIR}/APT_UPDATED"; then
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Applying APT Updates ]]${COLOR_DEFAULT}"
+else
+	echo -e "${COLOR_BLUE_LIGHT}[[ Applying APT Updates ]]${COLOR_DEFAULT}"
+	sudo apt -y update
+	sudo apt -y dist-upgrade
+	sudo bash -c "touch \"${INSTALL_DATA_DIR}/APT_UPDATED\""
+fi
 
 if [[ "$(grep_exists '^pi:' /etc/passwd)" != "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting pi User ]]${COLOR_DEFAULT}"
