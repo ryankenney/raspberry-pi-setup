@@ -5,7 +5,8 @@ set -e
 
 SCRIPT_FILENAME=$(basename "$0")
 SCRIPT_DIR=$(dirname `readlink -f "$0"`)
-source "${SCRIPT_DIR}/config.sh"
+INSTALL_CONFIG_FILE="${SCRIPT_DIR}/config.sh"
+source "${INSTALL_CONFIG_FILE}"
 
 # Setup colors
 # check if stdout is a terminal...
@@ -27,7 +28,62 @@ if test -t 1; then
 	fi
 fi
 
+YES_NO_RESPONSE=
+# ----------------
+# Prompts the user for a y/n response (case insensitive, but default value capitalized in prompt).
+#
+# $1 - The one-line user prompt
+# $2 - The default response (if user just hits enter). Value "true" or "false" (corresponding to "Y" or "N").
+#
+# The result of the user's input is returned via global variable YES_NO_RESPONSE.
+# with user inputs of "Y" and "N" corrsponding to "true" and "false".
+# ----------------
+selectYesNo() {
+    local PROMPT="$1"
+    shift
+    local DEFAULT="$1"
+    shift
+	verifyNoRemainingArgs $*
+
+    local REPLY=
+	local YES_NO_SUFFIX=
+
+	if [[ "$DEFAULT" == "true" ]]; then
+		YES_NO_SUFFIX="[Y/n]"
+	else
+		YES_NO_SUFFIX="[y/N]"
+	fi
+
+    echo ""
+    echo "$PROMPT $YES_NO_SUFFIX"
+    echo ""
+
+    while read; do
+            case $REPLY in
+            "")
+                    YES_NO_RESPONSE="$DEFAULT"
+                    break 2 # Break out of case and loop
+                    ;;
+            [yY])
+                    YES_NO_RESPONSE=true
+                    break 2 # Break out of case and loop
+                    ;;
+            [nN])
+                    YES_NO_RESPONSE=false
+                    break 2 # Break out of case and loop
+                    ;;
+            *)
+                    echo ""
+                    echo "$PROMPT"
+                    echo ""
+                    ;;
+            esac
+    done
+}
+
+# ----------------
 # Fully restarts the network
+# ----------------
 function restart_network() {
 	sudo systemctl daemon-reload
 	sudo systemctl stop dhcpcd
@@ -38,10 +94,12 @@ function restart_network() {
 	sudo systemctl restart networking.service
 }
 
+# ----------------
 # Verifies that the caller has another arg.
 # 
 # $1: The count of args of the caller. Pass in "$#".
 # $2: The name of the arg to describe on error.
+# ----------------
 function verify_has_arg() {
 	local argCount="$1"
 	shift
@@ -56,12 +114,14 @@ function verify_has_arg() {
 	fi
 }
 
+# ----------------
 # Tests whether the pattern exists in a file.
 # On true, echos "true". On false, echos "false".
 # Always exits 0 if no error.
 # 
 # $1: The pattern to grep.
 # $2: The file to grep in.
+# ----------------
 function grep_exists() {
 	verify_has_arg "$#" "pattern"
 	local grepPattern="$1"
@@ -84,7 +144,7 @@ function grep_exists() {
 
 # Initialize data dir
 INSTALL_DATA_DIR="/opt/${SCRIPT_FILENAME}"
-sudo mkdir "$INSTALL_DATA_DIR"
+sudo mkdir -p "$INSTALL_DATA_DIR"
 
 # Setup keyboard layout (and reboot)
 if [[ "$(grep_exists '^XKBLAYOUT="us"$' /etc/default/keyboard)" == "true" ]]; then
@@ -282,6 +342,18 @@ else
 	fi
 	echo -e "${COLOR_BLUE_LIGHT}[[ Deleting pi User ]]${COLOR_DEFAULT}"
 	sudo deluser pi
+fi
+
+if [[ ! -f "${INSTALL_CONFIG_FILE}" ]]; then 
+	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting Config File ]]${COLOR_DEFAULT}"
+else
+	echo -e "${COLOR_BLUE_LIGHT}[[ Deleting Config File ]]${COLOR_DEFAULT}"
+	echo "Your config file may contain passwords or other secrets."
+	echo "Config file: ${INSTALL_CONFIG_FILE}"
+	selectYesNo "Automatically delete file?" true
+	if [[ "${YES_NO_RESPONSE}" == "true" ]]; then
+		sudo shred --remove "${INSTALL_CONFIG_FILE}"
+	fi
 fi
 
 echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
