@@ -52,25 +52,13 @@ Run the script:
 
 	/opt/raspberry-pi-setup/bootstrap-raspberry-pi.sh
 
-When prompted to reboot, press enter, allow reboot:
-
-	--------------------------------
-	Resume this script after reboot.
-	--------------------------------
-	[[ Rebooting ]]
-	Press enter to continue
-
-... and re-login as `pi` and resume the script:
-
-	/opt/raspberry-pi-setup/bootstrap-raspberry-pi.sh
-
 If prompted for admin password, provide your chosen new password
 for the `INSTALL_ADMIN_USER` user in `config.sh`:
 
 	[[ Creating Admin User ]]
 	New Admin Password: 
 
-When prompted to switch to your new admi user, press enter, allow reboot:
+When prompted to switch to your new admin user, press enter, allow reboot:
 
 	------------------
 	Login as your new admin user after${COLOR_DEFAULT}"
