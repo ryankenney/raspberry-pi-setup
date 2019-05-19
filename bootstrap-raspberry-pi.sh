@@ -274,7 +274,7 @@ else
 fi
 
 # Set locale
-if [[ "$(locale | grep '^LANG='" == "LANG=en_US.UTF-8" ]]; then
+if [[ "$(locale | grep '^LANG=')" == "LANG=en_US.UTF-8" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Setting Locale to US:English ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Setting Locale to US:English ]]${COLOR_DEFAULT}"
