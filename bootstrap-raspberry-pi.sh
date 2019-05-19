@@ -332,10 +332,10 @@ if [[ "$(grep_exists '^pi:' /etc/passwd)" != "true" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting pi User ]]${COLOR_DEFAULT}"
 else
 	if [[ "$USER" = "pi" ]]; then
-		echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
-		echo -e "${COLOR_BLUE_LIGHT}Login as your new admin user after${COLOR_DEFAULT}"
-		echo -e "${COLOR_BLUE_LIGHT}reboot and resume this script.${COLOR_DEFAULT}"
-		echo -e "${COLOR_BLUE_LIGHT}------------------${COLOR_DEFAULT}"
+		echo -e "${COLOR_MAGENTA_LIGHT}------------------${COLOR_DEFAULT}"
+		echo -e "${COLOR_MAGENTA_LIGHT}Login as your new admin user after${COLOR_DEFAULT}"
+		echo -e "${COLOR_MAGENTA_LIGHT}reboot and resume this script.${COLOR_DEFAULT}"
+		echo -e "${COLOR_MAGENTA_LIGHT}------------------${COLOR_DEFAULT}"
 		echo -e "${COLOR_BLUE_LIGHT}[[ Rebooting ]]${COLOR_DEFAULT}"
 		read -p "Press enter to continue"
 		sudo reboot
@@ -348,8 +348,8 @@ if [[ ! -f "${INSTALL_CONFIG_FILE}" ]]; then
 	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Deleting Config File ]]${COLOR_DEFAULT}"
 else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Deleting Config File ]]${COLOR_DEFAULT}"
-	echo "Your config file may contain passwords or other secrets."
-	echo "Config file: ${INSTALL_CONFIG_FILE}"
+	echo -e "${COLOR_MAGENTA_LIGHT}Your config file may contain passwords or other secrets.${COLOR_DEFAULT}"
+	echo -e "Config file: ${INSTALL_CONFIG_FILE}"
 	selectYesNo "Automatically delete file?" true
 	if [[ "${YES_NO_RESPONSE}" == "true" ]]; then
 		sudo shred --remove "${INSTALL_CONFIG_FILE}"
