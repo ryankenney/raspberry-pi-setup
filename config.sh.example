@@ -9,18 +9,25 @@ INSTALL_HOSTNAME="mycomputer"
 INSTALL_DOMAIN="my.network"
 
 # Wifi Network
-# (uncomment to setup wifi)
+# (uncomment to enable wifi)
+# (both fields required)
 #INSTALL_WIFI_SSID="MyWifiNetwork"
 #INSTALL_WIFI_PASS="P@ssw0rd!"
 
-# IP Address + Subnet
-INSTALL_IP_ADDR="192.168.1.1/24"
-# Gateway 
-INSTALL_GATEWAY="192.168.1.1"
-# DNS Servers (space separated)
-INSTALL_DNS_SERVERS="8.8.8.8 8.8.4.4"
+# Wifi Network - Static Settings
+# (uncomment to enable static IP)
+# (all fields required)
+#INSTALL_WIFI_IP_ADDR="192.168.1.1/24"
+#INSTALL_WIFI_GATEWAY="192.168.1.1"
+#INSTALL_WIFI_DNS_SERVERS="8.8.8.8 8.8.4.4"
+
+# Ethernet Network - Static Settings
+# (uncomment to enable static IP)
+# (all fields required)
+#INSTALL_ETHERNET_IP_ADDR="192.168.1.1/24"
+#INSTALL_ETHERNET_GATEWAY="192.168.1.1"
+#INSTALL_ETHERNET_DNS_SERVERS="8.8.8.8 8.8.4.4"
 
 # Timezone
 # (see /usr/share/zoneinfo/)
 INSTALL_TIMEZONE="America/Los_Angeles"
-

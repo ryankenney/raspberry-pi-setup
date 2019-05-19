@@ -143,6 +143,38 @@ function grep_exists() {
 	fi
 }
 
+function setup_static_ip() {
+	verify_has_arg "$#" "device_name"
+	local device_name="$1"
+	shift
+	verify_has_arg "$#" "ip_address"
+	local ip_address="$1"
+	shift
+	verify_has_arg "$#" "gateway"
+	local gateway="$1"
+	shift
+	verify_has_arg "$#" "domain_name_servers"
+	local domain_name_servers="$1"
+	shift
+
+	if [[ "$(grep_exists "^interface ${device_name}\$" /etc/dhcpcd.conf)" == "true" ]]; then
+		echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Configuring Static IP for ${device_name} ]]${COLOR_DEFAULT}"
+	else
+		echo -e "${COLOR_BLUE_LIGHT}[[ Configuring Static IP for ${device_name} ]]${COLOR_DEFAULT}"
+		sudo cat >> /etc/dhcpcd.conf << EOL
+
+interface ${device_name}
+static ip_address=${ip_address}
+static routers=${gateway}
+static domain_name_servers=${domain_name_servers}
+EOL
+
+		echo -e "${COLOR_BLUE_LIGHT}[[ Restarting Network ]]${COLOR_DEFAULT}"
+		restart_network
+	fi
+}
+
+
 # Initialize data dir
 INSTALL_DATA_DIR="/opt/${SCRIPT_FILENAME}"
 sudo mkdir -p "$INSTALL_DATA_DIR"
@@ -198,7 +230,7 @@ else
 fi
 
 # Configure wifi
-if [[ "$INSTALL_WIFI_SSID" != "" && "$INSTALL_WIFI_SSID" != "" ]]; then
+if [[ "$INSTALL_WIFI_SSID" != "" && "$INSTALL_WIFI_PASS" != "" ]]; then
 	if [[ "$(grep_exists "^ssid=\"$INSTALL_WIFI_SSID\"\$" /etc/wpa_supplicant/wpa_supplicant.conf)" == "true" ]]; then
 		echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Configuring Wifi ]]${COLOR_DEFAULT}"
 	else
@@ -222,19 +254,12 @@ echo -e "${COLOR_BLUE_LIGHT}[[ Ensuring Firewall Enabled ]]${COLOR_DEFAULT}"
 sudo apt install -y --no-upgrade ufw
 sudo ufw enable
 
-if [[ "$(grep_exists '^static ip_address=.*$' /etc/dhcpcd.conf)" == "true" ]]; then
-	echo -e "${COLOR_BLUE_LIGHT}[[ SKIP: Configuring Static IP ]]${COLOR_DEFAULT}"
-else
-	echo -e "${COLOR_BLUE_LIGHT}[[ Configuring Static IP ]]${COLOR_DEFAULT}"
-	sudo cat >> /etc/dhcpcd.conf << EOL
-
-static ip_address=${INSTALL_IP_ADDR}
-static routers=${INSTALL_GATEWAY}
-static domain_name_servers=${INSALL_DNS_SERVERS}
-EOL
-
-	echo -e "${COLOR_BLUE_LIGHT}[[ Restarting Network ]]${COLOR_DEFAULT}"
-	restart_network
+# Setup static IPs
+if [[ "$INSTALL_WIFI_IP_ADDR" != "" ]]; then
+	setup_static_ip "wlan0" "$INSTALL_WIFI_IP_ADDR" "$INSTALL_WIFI_GATEWAY" "$INSTALL_WIFI_DNS_SERVERS"
+fi
+if [[ "$INSTALL_ETHERNET_IP_ADDR" != "" ]]; then
+	setup_static_ip "eth0" "$INSTALL_ETHERNET_IP_ADDR" "$INSTALL_ETHERNET_GATEWAY" "$INSTALL_ETHERNET_DNS_SERVERS"
 fi
 
 # Configure hostname
