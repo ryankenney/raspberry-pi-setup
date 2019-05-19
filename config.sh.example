@@ -1,33 +1,33 @@
 # Admin User to Create
-INSTALL_ADMIN_USER="myadmin"
+INSTALL_ADMIN_USER='myadmin'
 # (uncomment to set here, otherwise you'll be prompted)
-#INSTALL_ADMIN_PASS="P@ssw0rd!"
+#INSTALL_ADMIN_PASS='P@ssw0rd!'
 
 # Computer hostname
-INSTALL_HOSTNAME="mycomputer"
+INSTALL_HOSTNAME='mycomputer'
 # Computer domain
-INSTALL_DOMAIN="my.network"
+INSTALL_DOMAIN='my.network'
 
 # Wifi Network
 # (uncomment to enable wifi)
 # (both fields required)
-#INSTALL_WIFI_SSID="MyWifiNetwork"
-#INSTALL_WIFI_PASS="P@ssw0rd!"
+#INSTALL_WIFI_SSID='MyWifiNetwork'
+#INSTALL_WIFI_PASS='P@ssw0rd!'
 
 # Wifi Network - Static Settings
 # (uncomment to enable static IP)
 # (all fields required)
-#INSTALL_WIFI_IP_ADDR="192.168.1.1/24"
-#INSTALL_WIFI_GATEWAY="192.168.1.1"
-#INSTALL_WIFI_DNS_SERVERS="8.8.8.8 8.8.4.4"
+#INSTALL_WIFI_IP_ADDR='192.168.1.1/24'
+#INSTALL_WIFI_GATEWAY='192.168.1.1'
+#INSTALL_WIFI_DNS_SERVERS='8.8.8.8 8.8.4.4'
 
 # Ethernet Network - Static Settings
 # (uncomment to enable static IP)
 # (all fields required)
-#INSTALL_ETHERNET_IP_ADDR="192.168.1.1/24"
-#INSTALL_ETHERNET_GATEWAY="192.168.1.1"
-#INSTALL_ETHERNET_DNS_SERVERS="8.8.8.8 8.8.4.4"
+#INSTALL_ETHERNET_IP_ADDR='192.168.1.1/24'
+#INSTALL_ETHERNET_GATEWAY='192.168.1.1'
+#INSTALL_ETHERNET_DNS_SERVERS='8.8.8.8 8.8.4.4'
 
 # Timezone
 # (see /usr/share/zoneinfo/)
-INSTALL_TIMEZONE="America/Los_Angeles"
+INSTALL_TIMEZONE='America/Los_Angeles'
