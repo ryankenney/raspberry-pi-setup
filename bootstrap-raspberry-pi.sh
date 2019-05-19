@@ -28,6 +28,26 @@ if test -t 1; then
 	fi
 fi
 
+# ----------------
+# Verifies that the caller has another arg.
+# 
+# $1: The count of args of the caller. Pass in "$#".
+# $2: The name of the arg to describe on error.
+# ----------------
+function verify_has_arg() {
+	local argCount="$1"
+	shift
+	local argName="$1"
+	shift
+
+	if [[ "$argName" < "1" ]]; then
+		echo "" 1>&2
+		echo "ERROR: Missing required arg: $argName" 1>&2
+		echo "" 1>&2
+		exit 1
+	fi
+}
+
 YES_NO_RESPONSE=
 # ----------------
 # Prompts the user for a y/n response (case insensitive, but default value capitalized in prompt).
@@ -38,12 +58,13 @@ YES_NO_RESPONSE=
 # The result of the user's input is returned via global variable YES_NO_RESPONSE.
 # with user inputs of "Y" and "N" corrsponding to "true" and "false".
 # ----------------
-selectYesNo() {
+select_yes_no() {
+	verify_has_arg "$#" "prompt"
     local PROMPT="$1"
     shift
+	verify_has_arg "$#" "default_response"
     local DEFAULT="$1"
     shift
-	verifyNoRemainingArgs $*
 
     local REPLY=
 	local YES_NO_SUFFIX=
@@ -92,26 +113,6 @@ function restart_network() {
 	done
 	sudo systemctl start dhcpcd
 	sudo systemctl restart networking.service
-}
-
-# ----------------
-# Verifies that the caller has another arg.
-# 
-# $1: The count of args of the caller. Pass in "$#".
-# $2: The name of the arg to describe on error.
-# ----------------
-function verify_has_arg() {
-	local argCount="$1"
-	shift
-	local argName="$1"
-	shift
-	
-	if [[ "$argName" < "1" ]]; then
-		echo "" 1>&2
-		echo "ERROR: Missing required arg: $argName" 1>&2
-		echo "" 1>&2
-		exit 1
-	fi
 }
 
 # ----------------
@@ -350,7 +351,7 @@ else
 	echo -e "${COLOR_BLUE_LIGHT}[[ Deleting Config File ]]${COLOR_DEFAULT}"
 	echo -e "${COLOR_MAGENTA_LIGHT}Your config file may contain passwords or other secrets.${COLOR_DEFAULT}"
 	echo -e "Config file: ${INSTALL_CONFIG_FILE}"
-	selectYesNo "Automatically delete file?" true
+	select_yes_no "Automatically delete file?" true
 	if [[ "${YES_NO_RESPONSE}" == "true" ]]; then
 		sudo shred --remove "${INSTALL_CONFIG_FILE}"
 	fi
