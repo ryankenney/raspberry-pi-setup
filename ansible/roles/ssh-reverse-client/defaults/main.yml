@@ -1,0 +1,13 @@
+---
+
+ssh_servers:
+- remote_ssh_host: ssh1.example.com
+  remote_ssh_port: 22
+  remote_ssh_user: user
+  remote_tunnel_port: 9091
+  local_tunnel_port: 22
+- remote_ssh_host: ssh2.example.com
+  remote_ssh_port: 22
+  remote_ssh_user: user
+  remote_tunnel_port: 9092
+  local_tunnel_port: 22

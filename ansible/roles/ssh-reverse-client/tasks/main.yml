@@ -1,0 +1,36 @@
+---
+
+- name: Create autossh User
+  user:
+    name: autossh
+    state: present
+	shell: /usr/sbin/nologin
+	generate_ssh_key: yes
+
+# Create a service definition file
+# (Can be shared by several services,
+#  differenciated by the config files that follow.)
+- name: Create autossh Service Definition
+  template:
+    src: secure-tunnel.service.j2
+    dest: /etc/systemd/system/secure-tunnel@.service
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create autossh Service Config
+  template:
+    src: secure-tunnel.config.j2
+    dest: /etc/default/secure-tunnel@{{ item.remote_ssh_host }}
+    owner: root
+    group: root
+    mode: '0600'
+  with_items: '{{ ssh_servers }}'
+
+- name: Start/Enable autossh Service
+  service:
+    name: `secure-tunnel@{{ item.remote_ssh_host }}`
+    state: started
+    enabled: yes
+  with_items: '{{ ssh_servers }}'
+
