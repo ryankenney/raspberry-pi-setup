@@ -25,9 +25,11 @@ Features included in `bootstrap-raspberry-pi.sh`:
 Bootstrapping a Fresh Raspbian Image
 ----------------
 
+### Run bootstrap-raspberry-pi.sh
+
 Load a fresh Raspbian Stretch image and boot the Raspberry Pi
 
-Connect to the network via ethernet port or [Manually Setup Wifi](Manually-Setup-Wifi.md)
+Connect to the network via ethernet port or [Manually Setup Wifi](docs/Manually-Setup-Wifi.md)
 
 Login as the `pi` user
 
@@ -78,3 +80,10 @@ Continue to do so until you see:
 	------------------
 	[[ Rebooting ]]
 	Press enter to continue
+
+
+### Setup SSH Trust
+
+Follow [Establishing SSH Trust from Admin Workstaiton to Raspberry Pi](docs/Establishing-SSH-Trust-from-Admin-Workstaiton-to-Raspberry-Pi.md) to allow your admin workstation into SSH.
+
+
