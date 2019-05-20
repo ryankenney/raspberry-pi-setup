@@ -23,31 +23,32 @@ function do_upload() {
 	# -base64: Output data in ascii
 	# -A: No linebreaks in base64 output
 	# -bf-cbc: Sets crypto to Blowfish in CBC 
-	local encrypt_command='openssl enc -e -base64 -A -bf-cbc'
+	# -md: Message digest size. If not specified, and differs
+	#      between systems, will result in garbage.
+	local encrypt_command='openssl enc -e -base64 -A -bf-cbc -md sha256'
 
 	local encrypted_content="$(cat "$source_file" | $encrypt_command)"
 
-	local tinyurl="$(curl -s "http://tinyurl.com/api-create.php?url=$encrypted_content")"
-
-	echo "$tinyurl"
+	curl -s "http://tinyurl.com/api-create.php?url=$encrypted_content"
 }
 
 function do_download() {
 
-	local source_file="$1"
+	local tiny_url="$1"
 
 	# -d: Decrypt
 	# -base64: Output data in ascii
+	# -A: No linebreaks in base64 input
 	# -bf-cbc: Sets crypto to Blowfish in CBC 
-	local decrypt_command='openssl enc -d -base64 -bf-cbc'
+	# -md: Message digest size. If not specified, and differs
+	#      between systems, will result in garbage.
+	local decrypt_command='openssl enc -d -base64 -A -bf-cbc -md sha256'
 
 	# -s: Suppress download progress
 	# -I: Show headers
 	local curl_command='curl -s -I'
 
-	local decrypted_content="$($curl_command "$1" | sed -n 's|^Location:\s\+\(.\+\)$|\1|p' | $decrypt_command)"
-
-	echo "$decrypted_content"
+	$curl_command "$tiny_url" | sed -n 's|^[Ll]ocation:\s\+\(.\+\)$|\1|p' | $decrypt_command
 }
 
 function print_usage_and_exit() {
